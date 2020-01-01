@@ -212,7 +212,7 @@ impl Wad {
 
         for i in 0..vertex_count {
             let v = self.read_vertex((self.wad_dirs[index].lump_offset + i * 4) as usize);
-            map.add_vertex(v);
+            map.vertexes.push(v);
         }
     }
 
@@ -245,7 +245,7 @@ impl Wad {
             let linedef = self.read_map_linedef(
                 (self.wad_dirs[index].lump_offset + i * linedef_byte_size) as usize,
             );
-            map.add_linedef(linedef);
+            map.linedefs.push(linedef);
         }
     }
 }

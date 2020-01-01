@@ -13,33 +13,25 @@ pub enum LineDefFlags {
 
 #[derive(Debug)]
 pub struct Vertex {
-    x_pos: i16,
-    y_pos: i16,
+    pub x_pos: i16,
+    pub y_pos: i16,
 }
 
 impl Vertex {
     pub fn new(x: i16, y: i16) -> Vertex {
         Vertex { x_pos: x, y_pos: y }
     }
-
-    pub fn x(&self) -> i16 {
-        self.x_pos
-    }
-
-    pub fn y(&self) -> i16 {
-        self.y_pos
-    }
 }
 
 #[derive(Debug)]
 pub struct LineDef {
-    start_vertex: i16,
-    end_vertex: i16,
-    flags: u16, //TODO: enum?
-    line_type: u16,
-    sector_tag: u16,
-    front_sidedef: u16, //0xFFFF means there is no sidedef
-    back_sidedef: u16,  //0xFFFF means there is no sidedef
+    pub start_vertex: i16,
+    pub end_vertex: i16,
+    pub flags: u16, //TODO: enum?
+    pub line_type: u16,
+    pub sector_tag: u16,
+    pub front_sidedef: u16, //0xFFFF means there is no sidedef
+    pub back_sidedef: u16,  //0xFFFF means there is no sidedef
 }
 
 impl LineDef {
@@ -62,40 +54,12 @@ impl LineDef {
             back_sidedef,
         }
     }
-
-    pub fn start_vertex(&self) -> i16 {
-        self.start_vertex
-    }
-
-    pub fn end_vertex(&self) -> i16 {
-        self.end_vertex
-    }
-
-    pub fn flags(&self) -> u16 {
-        self.flags
-    }
-
-    pub fn line_type(&self) -> u16 {
-        self.line_type
-    }
-
-    pub fn sector_tag(&self) -> u16 {
-        self.sector_tag
-    }
-
-    pub fn front_sidedef(&self) -> u16 {
-        self.front_sidedef
-    }
-
-    pub fn back_sidedef(&self) -> u16 {
-        self.back_sidedef
-    }
 }
 
 pub struct Map {
-    name: String,
-    vertexes: Vec<Vertex>,
-    linedefs: Vec<LineDef>,
+    pub name: String,
+    pub vertexes: Vec<Vertex>,
+    pub linedefs: Vec<LineDef>,
 }
 
 impl Map {
@@ -105,26 +69,6 @@ impl Map {
             vertexes: Vec::new(),
             linedefs: Vec::new(),
         }
-    }
-
-    pub fn get_name(&self) -> &str {
-        &self.name
-    }
-
-    pub fn add_vertex(&mut self, v: Vertex) {
-        self.vertexes.push(v);
-    }
-
-    pub fn get_vertexes(&self) -> &[Vertex] {
-        &self.vertexes
-    }
-
-    pub fn add_linedef(&mut self, l: LineDef) {
-        self.linedefs.push(l);
-    }
-
-    pub fn get_linedefs(&self) -> &[LineDef] {
-        &self.linedefs
     }
 }
 
@@ -139,11 +83,11 @@ mod tests {
         wad.read_directories();
 
         let mut map = map::Map::new("E1M1".to_owned());
-        let index = wad.find_lump_index(map.get_name());
+        let index = wad.find_lump_index(&map.name);
         wad.read_map_vertexes(index, &mut map);
 
-        assert_eq!(map.get_vertexes()[0].x(), 1088);
-        assert_eq!(map.get_vertexes()[0].y(), -3680);
+        assert_eq!(map.vertexes[0].x_pos, 1088);
+        assert_eq!(map.vertexes[0].y_pos, -3680);
     }
 
     #[test]
@@ -152,15 +96,15 @@ mod tests {
         wad.read_directories();
 
         let mut map = map::Map::new("E1M1".to_owned());
-        let index = wad.find_lump_index(map.get_name());
+        let index = wad.find_lump_index(&map.name);
         wad.read_map_linedefs(index, &mut map);
 
-        let linedefs = map.get_linedefs();
-        assert_eq!(linedefs[0].start_vertex(), 0);
-        assert_eq!(linedefs[0].end_vertex(), 1);
-        assert_eq!(linedefs[2].start_vertex(), 3);
-        assert_eq!(linedefs[2].end_vertex(), 0);
-        assert_eq!(linedefs[2].front_sidedef(), 2);
-        assert_eq!(linedefs[2].back_sidedef(), 65535);
+        let linedefs = map.linedefs;
+        assert_eq!(linedefs[0].start_vertex, 0);
+        assert_eq!(linedefs[0].end_vertex, 1);
+        assert_eq!(linedefs[2].start_vertex, 3);
+        assert_eq!(linedefs[2].end_vertex, 0);
+        assert_eq!(linedefs[2].front_sidedef, 2);
+        assert_eq!(linedefs[2].back_sidedef, 65535);
     }
 }
