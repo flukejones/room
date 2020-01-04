@@ -1,0 +1,57 @@
+WAD Authoring Template V1.4   (Clip this line)
+================================================================
+Title                   :
+Filename                : xxxx.WAD
+Author                  : Your name here
+Email Address           :
+Misc. Author Info       :
+
+Description             : Set the mood here.
+
+Additional Credits to   :
+================================================================
+
+* Play Information *
+
+Game                    : DOOM I/DOOM II/Both
+Episode and Level #     : ExMx (,ExMx,...)
+Single Player           : Yes/No
+Cooperative 2-4 Player  : Yes/No
+Deathmatch 2-4 Player   : Yes/No
+Difficulty Settings     : Yes/Not implemented
+New Sounds              : Yes/No
+New Graphics            : Yes/No
+New Music               : Yes/No
+Demos Replaced          : None/1/2/3/All
+
+* Construction *
+
+Base                    : New level from scratch/Modified ExMx/xxx.WAD
+Editor(s) used          :
+Known Bugs              :
+
+
+* Copyright / Permissions *
+
+Authors (MAY/may NOT) use this level as a base to build additional
+levels.
+
+(One of the following)
+
+You MAY distribute this WAD, provided you include this file, with
+no modifications.  You may distribute this file in any electronic
+format (BBS, Diskette, CD, etc) as long as you include this file
+intact.
+
+You MAY not distribute this WAD file in any format.
+
+You may do whatever you want with this file.
+
+
+* Where to get this WAD *
+
+FTP sites:
+
+BBS numbers:
+
+Other:
