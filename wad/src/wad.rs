@@ -264,7 +264,7 @@ impl Wad {
         v
     }
 
-    pub fn load_map<'m>(&self, mut map: &'m mut Map) {
+    pub fn load_map<'m>(&self, mut map: &'m mut Map<'m>) {
         let index = self.find_lump_index("E1M1");
         // THINGS
         map.set_things(
@@ -311,7 +311,7 @@ impl Wad {
                     &self.wad_data[offset + 4..offset + 12],
                     &self.wad_data[offset + 12..offset + 20],
                     &self.wad_data[offset + 20..offset + 28],
-                    DPtr::new(sector),
+                    sector,
                 )
             }),
         );
@@ -324,7 +324,7 @@ impl Wad {
                 let back_sidedef = {
                     let index = self.read_2_bytes(offset + 12) as usize;
                     if index < 65535 {
-                        Some(DPtr::new(&map.get_sidedefs()[index]))
+                        Some(&map.get_sidedefs()[index])
                     } else {
                         None
                     }
@@ -335,7 +335,7 @@ impl Wad {
                     self.read_2_bytes(offset + 4),
                     self.read_2_bytes(offset + 6),
                     self.read_2_bytes(offset + 8),
-                    DPtr::new(front_sidedef),
+                    front_sidedef,
                     back_sidedef,
                 )
             }),
@@ -352,7 +352,7 @@ impl Wad {
                 DPtr::new(start_vertex),
                 DPtr::new(end_vertex),
                 self.read_2_bytes(offset + 4),
-                DPtr::new(linedef),
+                linedef,
                 self.read_2_bytes(offset + 8),
                 self.read_2_bytes(offset + 10),
             )

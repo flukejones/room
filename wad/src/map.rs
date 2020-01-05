@@ -21,20 +21,20 @@ pub struct MapExtents {
 /// prevent unwanted removal of items, which *will* break references and
 /// segfault
 #[derive(Debug)]
-pub struct Map {
+pub struct Map<'m> {
     name: String,
     things: Vec<Thing>,
     vertexes: Vec<Vertex>,
-    linedefs: Vec<LineDef>,
+    linedefs: Vec<LineDef<'m>>,
     sectors: Vec<Sector>,
-    sidedefs: Vec<SideDef>,
+    sidedefs: Vec<SideDef<'m>>,
     subsectors: Vec<SubSector>,
-    segments: Vec<Segment>,
+    segments: Vec<Segment<'m>>,
     extents: MapExtents,
 }
 
-impl Map {
-    pub fn new(name: String) -> Map {
+impl<'m> Map<'m> {
+    pub fn new(name: String) -> Map<'m> {
         Map {
             name,
             things: Vec::new(),
@@ -89,7 +89,7 @@ impl Map {
         &self.linedefs
     }
 
-    pub fn set_linedefs(&mut self, l: Vec<LineDef>) {
+    pub fn set_linedefs(&mut self, l: Vec<LineDef<'m>>) {
         self.linedefs = l;
     }
 
@@ -105,7 +105,7 @@ impl Map {
         &self.sidedefs
     }
 
-    pub fn set_sidedefs(&mut self, s: Vec<SideDef>) {
+    pub fn set_sidedefs(&mut self, s: Vec<SideDef<'m>>) {
         self.sidedefs = s;
     }
 
@@ -121,7 +121,7 @@ impl Map {
         &self.segments
     }
 
-    pub fn set_segments(&mut self, s: Vec<Segment>) {
+    pub fn set_segments(&mut self, s: Vec<Segment<'m>>) {
         self.segments = s;
     }
 
@@ -205,16 +205,10 @@ mod tests {
         assert_eq!(linedefs[0].end_vertex.get().x, 1024);
         assert_eq!(linedefs[2].start_vertex.get().x, 1088);
         assert_eq!(linedefs[2].end_vertex.get().x, 1088);
-        assert_eq!(
-            linedefs[2].front_sidedef.get().sector.get().floor_tex,
-            "FLOOR4_8"
-        );
+        assert_eq!(linedefs[2].front_sidedef.sector.floor_tex, "FLOOR4_8");
         assert_eq!(linedefs[474].start_vertex.get().x, 3536);
         assert_eq!(linedefs[474].end_vertex.get().x, 3520);
-        assert_eq!(
-            linedefs[474].front_sidedef.get().sector.get().floor_tex,
-            "FLOOR4_8"
-        );
+        assert_eq!(linedefs[474].front_sidedef.sector.floor_tex, "FLOOR4_8");
         assert!(linedefs[2].back_sidedef.is_none());
         assert_eq!(linedefs[474].flags, 1);
         assert!(linedefs[474].back_sidedef.is_none());
@@ -248,15 +242,15 @@ mod tests {
         assert_eq!(sidedefs[0].x_offset, 0);
         assert_eq!(sidedefs[0].y_offset, 0);
         assert_eq!(sidedefs[0].middle_tex, "DOOR3");
-        assert_eq!(sidedefs[0].sector.get().floor_tex, "FLOOR4_8");
+        assert_eq!(sidedefs[0].sector.floor_tex, "FLOOR4_8");
         assert_eq!(sidedefs[9].x_offset, 0);
         assert_eq!(sidedefs[9].y_offset, 48);
         assert_eq!(sidedefs[9].middle_tex, "BROWN1");
-        assert_eq!(sidedefs[9].sector.get().floor_tex, "FLOOR4_8");
+        assert_eq!(sidedefs[9].sector.floor_tex, "FLOOR4_8");
         assert_eq!(sidedefs[647].x_offset, 4);
         assert_eq!(sidedefs[647].y_offset, 0);
         assert_eq!(sidedefs[647].middle_tex, "SUPPORT2");
-        assert_eq!(sidedefs[647].sector.get().floor_tex, "FLOOR4_8");
+        assert_eq!(sidedefs[647].sector.floor_tex, "FLOOR4_8");
 
         let segments = map.get_segments();
         assert_eq!(segments[0].start_vertex.get().x, 1552);
@@ -264,18 +258,12 @@ mod tests {
         assert_eq!(segments[731].start_vertex.get().x, 3040);
         assert_eq!(segments[731].end_vertex.get().x, 2976);
         assert_eq!(segments[0].angle, 16384);
-        assert_eq!(
-            segments[0].linedef.get().front_sidedef.get().upper_tex,
-            "BIGDOOR2"
-        );
+        assert_eq!(segments[0].linedef.front_sidedef.upper_tex, "BIGDOOR2");
         assert_eq!(segments[0].direction, 0);
         assert_eq!(segments[0].offset, 0);
 
         assert_eq!(segments[731].angle, 32768);
-        assert_eq!(
-            segments[731].linedef.get().front_sidedef.get().upper_tex,
-            "STARTAN1"
-        );
+        assert_eq!(segments[731].linedef.front_sidedef.upper_tex, "STARTAN1");
         assert_eq!(segments[731].direction, 1);
         assert_eq!(segments[731].offset, 0);
 

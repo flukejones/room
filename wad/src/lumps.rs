@@ -94,7 +94,7 @@ impl Vertex {
 /// and each linedef's record is 14 bytes, and is made up of 7 16-bit
 /// fields
 #[derive(Debug)]
-pub struct LineDef {
+pub struct LineDef<'s> {
     /// The line starts from this point
     pub start_vertex: DPtr<Vertex>,
     /// The line ends at this point
@@ -107,21 +107,21 @@ pub struct LineDef {
     /// field)
     pub sector_tag: u16,
     /// Index number of the front `SideDef` for this line
-    pub front_sidedef: DPtr<SideDef>, //0xFFFF means there is no sidedef
+    pub front_sidedef: &'s SideDef<'s>, //0xFFFF means there is no sidedef
     /// Index number of the back `SideDef` for this line
-    pub back_sidedef: Option<DPtr<SideDef>>, //0xFFFF means there is no sidedef
+    pub back_sidedef: Option<&'s SideDef<'s>>, //0xFFFF means there is no sidedef
 }
 
-impl LineDef {
+impl<'s> LineDef<'s> {
     pub fn new(
         start_vertex: DPtr<Vertex>,
         end_vertex: DPtr<Vertex>,
         flags: u16,
         line_type: u16,
         sector_tag: u16,
-        front_sidedef: DPtr<SideDef>,
-        back_sidedef: Option<DPtr<SideDef>>,
-    ) -> LineDef {
+        front_sidedef: &'s SideDef<'s>,
+        back_sidedef: Option<&'s SideDef<'s>>,
+    ) -> LineDef<'s> {
         LineDef {
             start_vertex,
             end_vertex,
@@ -139,7 +139,7 @@ impl LineDef {
 ///
 /// Each `Segment` record is 12 bytes
 #[derive(Debug)]
-pub struct Segment {
+pub struct Segment<'l> {
     /// The line starts from this point
     pub start_vertex: DPtr<Vertex>,
     /// The line ends at this point
@@ -147,7 +147,7 @@ pub struct Segment {
     /// Binary Angle Measurement
     pub angle: u16,
     /// The Linedef this segment travels along
-    pub linedef: DPtr<LineDef>,
+    pub linedef: &'l LineDef<'l>,
     pub direction: u16,
     /// Offset distance along the linedef (from `start_vertex`) to the start
     /// of this `Segment`
@@ -157,15 +157,15 @@ pub struct Segment {
     pub offset: u16,
 }
 
-impl Segment {
+impl<'l> Segment<'l> {
     pub fn new(
         start_vertex: DPtr<Vertex>,
         end_vertex: DPtr<Vertex>,
         angle: u16,
-        linedef: DPtr<LineDef>,
+        linedef: &'l LineDef<'l>,
         direction: u16,
         offset: u16,
-    ) -> Segment {
+    ) -> Segment<'l> {
         Segment {
             start_vertex,
             end_vertex,
@@ -269,7 +269,7 @@ impl Sector {
 ///
 /// Each `SideDef` record is 30 bytes
 #[derive(Debug)]
-pub struct SideDef {
+pub struct SideDef<'s> {
     pub x_offset: i16,
     pub y_offset: i16,
     /// Name of upper texture used for example in the upper of a window
@@ -279,18 +279,18 @@ pub struct SideDef {
     /// The regular part of a wall
     pub middle_tex: String,
     /// Sector that this sidedef faces or helps to surround
-    pub sector: DPtr<Sector>,
+    pub sector: &'s Sector,
 }
 
-impl SideDef {
+impl<'s> SideDef<'s> {
     pub fn new(
         x_offset: i16,
         y_offset: i16,
         upper_tex: &[u8],
         lower_tex: &[u8],
         middle_tex: &[u8],
-        sector: DPtr<Sector>,
-    ) -> SideDef {
+        sector: &'s Sector,
+    ) -> SideDef<'s> {
         if upper_tex.len() != 8 {
             panic!(
                 "sidedef upper_tex name incorrect length, expected 8, got {}",
