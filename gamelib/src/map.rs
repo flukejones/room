@@ -1,3 +1,4 @@
+use sdl2::{gfx::primitives::DrawRenderer, render::Canvas, video::Window};
 use std::f32::consts::{FRAC_PI_2, FRAC_PI_4};
 use std::str;
 
@@ -405,17 +406,18 @@ impl Map {
         None
     }
 
-    pub fn add_line<'a>(
+    fn add_line<'a>(
         &'a self,
         object: &Object,
         seg: &'a Segment,
-        seg_list: &mut Vec<&'a Segment>,
+        canvas: &mut Canvas<Window>,
     ) {
         if !seg.is_facing_point(&object.xy) {
             return;
         }
 
         // Is seg in front of the point?
+        // This will quickly reject many lines
         let unit = unit_vec_from(object.rotation) * 2.0;
         // Will usually be left of point
         let d1 = (*seg.start_vertex - object.xy).length_squared();
@@ -427,39 +429,126 @@ impl Map {
             return;
         }
 
-        seg_list.push(seg);
+        if let Some(back_sector) = &seg.linedef.back_sidedef {
+            let front_sector = &seg.linedef.front_sidedef.sector;
+            let back_sector = &back_sector.sector;
+
+            // Doors. Block view
+            if back_sector.ceil_height >= front_sector.floor_height
+                || back_sector.floor_height <= front_sector.ceil_height
+            {
+                // TODO: clipsolid
+                return;
+            }
+
+            // Windows usually, but also changes in heights from sectors eg: steps
+            if back_sector.ceil_height != front_sector.ceil_height
+                || back_sector.floor_height != front_sector.floor_height
+            {
+                // TODO: clip-pass
+                return;
+            }
+
+            // Reject empty lines used for triggers and special events.
+            // Identical floor and ceiling on both sides, identical light levels
+            // on both sides, and no middle texture.
+            if back_sector.ceil_tex == front_sector.ceil_tex
+                && back_sector.floor_tex == front_sector.floor_tex
+                && back_sector.light_level == front_sector.light_level
+                && seg.linedef.front_sidedef.middle_tex.is_empty()
+            {
+                return;
+            }
+        }
+
+        // TODO: clipsolid by default
+
+        // TESTING
+        let alpha = 255;
+        let screen_start = self.vertex_to_screen(&seg.start_vertex, canvas);
+        let screen_end = self.vertex_to_screen(&seg.end_vertex, canvas);
+
+        let mut draw_colour = sdl2::pixels::Color::RGBA(190, 160, 0, alpha);
+        let sector = &seg.linedef.front_sidedef.sector;
+        if sector.floor_height <= object.z as i16
+            && sector.ceil_height > object.z as i16
+        {
+            draw_colour = sdl2::pixels::Color::RGBA(255, 255, 255, alpha);
+        }
+        if seg.direction == 0 {
+            canvas
+                .thick_line(
+                    screen_start.0,
+                    screen_start.1,
+                    screen_end.0,
+                    screen_end.1,
+                    3,
+                    draw_colour,
+                )
+                .unwrap();
+        }
+    }
+
+    fn draw_subsector<'a>(
+        &'a self,
+        object: &Object,
+        subsect: &SubSector,
+        canvas: &mut Canvas<Window>,
+    ) {
+        let segs = self.get_segments();
+
+        // TODO: planes for floor & ceiling
+
+        for i in subsect.start_seg..subsect.start_seg + subsect.seg_count {
+            let seg = &segs[i as usize];
+            self.add_line(object, seg, canvas);
+        }
     }
 
     pub fn draw_bsp<'a>(
         &'a self,
         object: &Object,
         node_id: u16,
-        seg_list: &mut Vec<&'a Segment>,
+        canvas: &mut Canvas<Window>,
     ) {
         if node_id & IS_SSECTOR_MASK == IS_SSECTOR_MASK {
             // It's a leaf node and is the index to a subsector
             let subsect =
                 &self.get_subsectors()[(node_id ^ IS_SSECTOR_MASK) as usize];
-            //let sector = subsect.sector;
-            let segs = self.get_segments();
-
-            for i in subsect.start_seg..subsect.start_seg + subsect.seg_count {
-                let seg = &segs[i as usize];
-                self.add_line(object, seg, seg_list);
-            }
+            self.draw_subsector(object, &subsect, canvas);
             return;
         }
 
         let node = &self.nodes[node_id as usize];
 
         let side = node.point_on_side(&object.xy);
-        self.draw_bsp(object, node.child_index[side], seg_list);
+        self.draw_bsp(object, node.child_index[side], canvas);
 
         // check if each corner of the BB is in the FOV
         //if node.point_in_bounds(&v, side ^ 1) {
         if node.bb_extents_in_fov(object, self.half_fov, side ^ 1) {
-            self.draw_bsp(object, node.child_index[side ^ 1], seg_list);
+            self.draw_bsp(object, node.child_index[side ^ 1], canvas);
         }
+    }
+
+    fn vertex_to_screen(
+        &self,
+        v: &Vertex,
+        canvas: &mut Canvas<Window>,
+    ) -> (i16, i16) {
+        let scale = self.extents.automap_scale;
+        let scr_height = canvas.viewport().height() as f32;
+        let scr_width = canvas.viewport().width() as f32;
+
+        let x_pad = (scr_width * scale - self.extents.width) / 2.0;
+        let y_pad = (scr_height * scale - self.extents.height) / 2.0;
+
+        let x_shift = -self.extents.min_vertex.x() + x_pad;
+        let y_shift = -self.extents.min_vertex.y() + y_pad;
+        (
+            ((v.x() + x_shift) / scale) as i16,
+            (scr_height - (v.y() + y_shift) / scale) as i16,
+        )
     }
 }
 

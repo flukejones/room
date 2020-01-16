@@ -199,12 +199,11 @@ impl<'c> Game<'c> {
                 .unwrap();
         }
 
-        let mut segs = Vec::new();
-        self.map
-            .draw_bsp(&self.player, self.map.start_node(), &mut segs);
-        for seg in segs {
-            self.draw_line(seg);
-        }
+        self.map.draw_bsp(
+            &self.player,
+            self.map.start_node(),
+            &mut self.canvas,
+        );
 
         let player = self.vertex_to_screen(&self.player.xy);
 
@@ -241,97 +240,5 @@ impl<'c> Game<'c> {
                 yel,
             )
             .unwrap();
-    }
-
-    /// Testing function
-    fn draw_line(&self, seg: &Segment) {
-        let alpha = 255;
-        let screen_start = self.vertex_to_screen(&seg.start_vertex);
-        let screen_end = self.vertex_to_screen(&seg.end_vertex);
-
-        let mut draw_colour = sdl2::pixels::Color::RGBA(0, 0, 160, alpha);
-
-        let flags = seg.linedef.flags;
-        if flags & LineDefFlags::TwoSided as u16 == 0 {
-            draw_colour = sdl2::pixels::Color::RGBA(255, 50, 50, alpha);
-        }
-
-        if seg.linedef.flags & LineDefFlags::Secret as u16
-            == LineDefFlags::Secret as u16
-        {
-            draw_colour = sdl2::pixels::Color::RGBA(100, 100, 255, alpha);
-        }
-
-        // Testing stuff
-        if let Some(back_sector) = &seg.linedef.back_sidedef {
-            let front_sector = &seg.linedef.front_sidedef.sector;
-            let back_sector = &back_sector.sector;
-            let mut draw = false;
-
-            // Doors. Block view
-            if back_sector.ceil_height <= front_sector.floor_height
-                || back_sector.floor_height >= front_sector.ceil_height
-            {
-                draw_colour = sdl2::pixels::Color::RGBA(255, 255, 120, alpha);
-                draw = true;
-            }
-
-            // Windows usually, but also changes in heights from sectors eg: steps
-            if back_sector.ceil_height != front_sector.ceil_height
-                || back_sector.floor_height != front_sector.floor_height
-            {
-                draw_colour = sdl2::pixels::Color::RGBA(255, 170, 170, alpha);
-                draw = true;
-            }
-
-            // Reject empty lines used for triggers and special events.
-            // Identical floor and ceiling on both sides, identical light levels
-            // on both sides, and no middle texture.
-            if back_sector.ceil_tex == front_sector.ceil_tex
-                && back_sector.floor_tex == front_sector.floor_tex
-                && back_sector.light_level == front_sector.light_level
-                && seg.linedef.front_sidedef.middle_tex.is_empty()
-            {
-                return;
-            }
-
-            if draw {
-                self.canvas
-                    .thick_line(
-                        screen_start.0,
-                        screen_start.1,
-                        screen_end.0,
-                        screen_end.1,
-                        2,
-                        draw_colour,
-                    )
-                    .unwrap();
-                return;
-            }
-        }
-
-        // Identify which lines surround the planes that would be drawn
-        // White: meaning sector floor and ceiling are within the player view
-        let sector = &seg.linedef.front_sidedef.sector;
-        if sector.floor_height <= self.player.z as i16
-            && sector.ceil_height > self.player.z as i16
-        {
-            draw_colour = sdl2::pixels::Color::RGBA(255, 255, 255, alpha);
-        }
-
-        // Because linedefs may have multiple segs in both directions we'll mask out some
-        // just for the sake of drawing
-        if seg.direction == 0 {
-            self.canvas
-                .thick_line(
-                    screen_start.0,
-                    screen_start.1,
-                    screen_end.0,
-                    screen_end.1,
-                    3,
-                    draw_colour,
-                )
-                .unwrap();
-        }
     }
 }
