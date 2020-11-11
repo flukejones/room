@@ -1,4 +1,4 @@
-image: rust:1.40
+image: rust:1.47
 
 .rust_cache: &rust_cache
   cache:
@@ -33,7 +33,7 @@ clippy:
     - cargo clippy --all
 
 pages:
-  image: rust:1.40
+  image: rust:1.47
   stage: deploy
   only:
     - master

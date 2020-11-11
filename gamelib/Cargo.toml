@@ -12,7 +12,7 @@ wad = { path = "../wad" }
 glam = "0.8.5"
 
 [dependencies.sdl2]
-version = "0.32"
+version = "0.34.3"
 default-features = false
 features = ["gfx"]
 
