@@ -147,62 +147,62 @@ APPENDICES
 5. [Other helpful documents][A-5]
 6. [Acknowledgments][A-6]
 
-[1]: ./Chapter1.md
-[1-1]: ./Chapter1.md
-[1-2]: ./Chapter1.md
+[1]: ./Chapter01.md
+[1-1]: ./Chapter01.md
+[1-2]: ./Chapter01.md
 
 
-[2]: ./Chapter2.md
-[2-1]: ./Chapter2.md
-[2-2]: ./Chapter2.md
-[2-3]: ./Chapter2.md
+[2]: ./Chapter02.md
+[2-1]: ./Chapter02.md
+[2-2]: ./Chapter02.md
+[2-3]: ./Chapter02.md
 
-[3]: ./Chapter3.md
+[3]: ./Chapter03.md
 
-[4]: ./Chapter4.md
-[4-1]: ./Chapter4.md
-[4-2]: ./Chapter4.md
-[4-2-1]: ./Chapter4.md
-[4-2-2]: ./Chapter4.md
-[4-2-3]: ./Chapter4.md
-[4-3]: ./Chapter4.md
-[4-3-1]: ./Chapter4.md
-[4-3-2]: ./Chapter4.md
-[4-4]: ./Chapter4.md
-[4-5]: ./Chapter4.md
-[4-6]: ./Chapter4.md
-[4-7]: ./Chapter4.md
-[4-8]: ./Chapter4.md
-[4-9]: ./Chapter4.md
-[4-9-1]: ./Chapter4.md
-[4-10]: ./Chapter4.md
-[4-11]: ./Chapter4.md
+[4]: ./Chapter04.md
+[4-1]: ./Chapter04.md
+[4-2]: ./Chapter04.md
+[4-2-1]: ./Chapter04.md
+[4-2-2]: ./Chapter04.md
+[4-2-3]: ./Chapter04.md
+[4-3]: ./Chapter04.md
+[4-3-1]: ./Chapter04.md
+[4-3-2]: ./Chapter04.md
+[4-4]: ./Chapter04.md
+[4-5]: ./Chapter04.md
+[4-6]: ./Chapter04.md
+[4-7]: ./Chapter04.md
+[4-8]: ./Chapter04.md
+[4-9]: ./Chapter04.md
+[4-9-1]: ./Chapter04.md
+[4-10]: ./Chapter04.md
+[4-11]: ./Chapter04.md
 
-[5]: ./Chapter5.md
-[5-1]: ./Chapter5.md
+[5]: ./Chapter05.md
+[5-1]: ./Chapter05.md
 
-[6]: ./Chapter6.md
-[6-1]: ./Chapter6.md
+[6]: ./Chapter06.md
+[6-1]: ./Chapter06.md
 
-[7]: ./Chapter7.md
-[7-1]: ./Chapter7.md
-[7-2]: ./Chapter7.md
-[7-3]: ./Chapter7.md
-[7-4]: ./Chapter7.md
-[7-5]: ./Chapter7.md
+[7]: ./Chapter07.md
+[7-1]: ./Chapter07.md
+[7-2]: ./Chapter07.md
+[7-3]: ./Chapter07.md
+[7-4]: ./Chapter07.md
+[7-5]: ./Chapter07.md
 
-[8]: ./Chapter8.md
-[8-1]: ./Chapter8.md
-[8-2]: ./Chapter8.md
-[8-3]: ./Chapter8.md
-[8-4]: ./Chapter8.md
-[8-4-1]: ./Chapter8.md
-[8-4-2]: ./Chapter8.md
-[8-5]: ./Chapter8.md
-[8-6]: ./Chapter8.md
-[8-6-1]: ./Chapter8.md
+[8]: ./Chapter08.md
+[8-1]: ./Chapter08.md
+[8-2]: ./Chapter08.md
+[8-3]: ./Chapter08.md
+[8-4]: ./Chapter08.md
+[8-4-1]: ./Chapter08.md
+[8-4-2]: ./Chapter08.md
+[8-5]: ./Chapter08.md
+[8-6]: ./Chapter08.md
+[8-6-1]: ./Chapter08.md
 
-[9]: ./Chapter9.md
+[9]: ./Chapter09.md
 
 [10]: ./Chapter10.md
 [10-1]: ./Chapter10.md
