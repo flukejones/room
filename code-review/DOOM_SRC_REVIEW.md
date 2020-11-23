@@ -8,7 +8,7 @@ Because I can, and it's a very good way to learn the Doom engine and how it did 
 
 The Doom (C src) call tree in detail:
 
-`main` does nothing but call `D_DoomMain` which then does a large amoutn of tasks:
+`main` does nothing but call `D_DoomMain` which then does a large amount of tasks:
 - parse CLI args,
 - networking setup for network games,
 - performs all the subsystem init (and the Linuxy style startup output with `DEH_printf`),
@@ -19,6 +19,23 @@ The Doom (C src) call tree in detail:
 - Chains to `D_DoomLoop`
 
 There is a heck of a lot of game setup stuff being done here with CLI args.
+
+- `D_DoomLoop`
+  + `D_RunFrame`
+    - `I_StartFrame` // does nothing?
+    - [`TryRunTics`](#TryRunTics)
+      + `loop_interface->RunTic()`
+        - `G_Ticker`
+          + `P_Ticker`, if game state is `GS_LEVEL`
+            - `P_RunThinkers`
+            - `P_UpdateSpecials`
+            - `P_RespawnSpecials`
+          + `WI_Ticker` if game state is `GS_INTERMISSION`
+          + `F_Ticker` if game state is `GS_FINALE`
+          + `D_PageTicker` if game state is `GS_DEMOSCREEN`
+    - `S_UpdateSounds
+    - [`D_Display`](#D_Display)
+    - [`I_FinishUpdate`](#I_FinishUpdate) called after [`D_Display`](#D_Display) if no screen wipe
 
 # D_DoomLoop
 - `D_DoomLoop`, main loop, never exits. Timing, I/O, ticker, drawers. I_GetTime, I_StartFrame, and I_StartTic. Calls below functions as a pre-start then calls `D_RunFrame` in a loop that never exits.
