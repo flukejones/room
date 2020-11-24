@@ -153,3 +153,60 @@ Can you see how it becomes difficult to prove data lifetimes, let alone getting 
 Lastly, the player is a special case. Made up of 3 different structs and haveing a cyclic pointer link between player and mobj:
 
 ![](./images/player_links.png)
+
+# Other info
+
+Functions called for each object types thinker:
+
+**ceiling_t**
+```C
+ceiling->thinker.function.acp1 = (actionf_p1)T_MoveCeiling;
+```
+
+**vldoor_t**
+```C
+door->thinker.function.acp1 = (actionf_p1)T_VerticalDoor;
+```
+
+**floormove_t**
+```C
+floor->thinker.function.acp1 = (actionf_p1)T_MoveFloor;
+```
+
+**plat_t**
+```C
+plat->thinker.function.acp1 = (actionf_p1)T_PlatRaise;
+```
+
+**fireflicker_t**
+```C
+flick->thinker.function.acp1 = (actionf_p1)T_FireFlicker;
+```
+
+**lightflash_t**
+```C
+flash->thinker.function.acp1 = (actionf_p1)T_LightFlash;
+```
+
+**strobe_t**
+```C
+flash->thinker.function.acp1 = (actionf_p1)T_StrobeFlash;
+```
+
+**glow_t**
+```C
+g->thinker.function.acp1 = (actionf_p1)T_Glow;
+```
+
+**mobj_t**
+```C
+mobj->thinker.function.acp1 = (actionf_p1)P_MobjThinker;
+```
+
+*each of these objects owns the function*.
+
+# Side nots for self
+
+Thinker action can be a trait. The trait can then operate on self as is, and can be stored in a single array as `Vec<Option<dyn Thinker>>`
+
+States are the hard part as there are two function types in a state. There are 900+ states in a global array, and access through states is through an enum indexer.
