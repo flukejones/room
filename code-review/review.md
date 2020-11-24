@@ -72,12 +72,12 @@ Does two things, a screen 'wipe' if required which is the randomised columns of 
 - [`D_Display`](#D_Display), this may return a bool, true if a screen wipe is required
 - [`I_FinishUpdate`](#I_FinishUpdate) called after [`D_Display`](#D_Display) if no screen wipe
 
-## D_Display
+### D_Display
 
-## I_FinishUpdate
+### I_FinishUpdate
 Mostly about finalising a blit to screen
 
-## TryRunTics
+# TryRunTics
 
 **In progress**
 
