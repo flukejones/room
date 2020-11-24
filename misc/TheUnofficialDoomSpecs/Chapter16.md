@@ -28,7 +28,7 @@ Jeff Bird (jeff@wench.ece.jcu.edu.au)
 Alistair Brown (A.D.Brown@bradford.ac.uk)
 	Helped me understand the NODES and explained REJECT.
 
-Frans P. de Vries (fpdevries@hgl.signaal.nl)
+Frans P. de Vries (f32devries@hgl.signaal.nl)
 	The cool ASCII DOOM logo used for the header. Also, gave a
 	comprehensive list of typos and mistakes in the 1.3 specs.
 

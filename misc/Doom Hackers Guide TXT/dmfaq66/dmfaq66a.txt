@@ -430,7 +430,7 @@ are rewritten, then the version number is increased by 1.0.  This is called a
 
 (1-2-1): About the "Official" DOOM ASCII Logos
 ==============================================
-        Thanks to Frans P. de Vries (fpdevries@hgl.signaal.nl), an
+        Thanks to Frans P. de Vries (f32devries@hgl.signaal.nl), an
 incredible ASCII DOOM logo was added to the beginning of the document in
 v5.5 of the FAQ.
         The DOOM II logo was added in v6.666 of the FAQ.
@@ -624,7 +624,7 @@ Ajaipal S. Tanwar (tanwar@utxvms.cc.utexas.edu) - Secret level information
 Aaron Fredrick Tiensivu (tiensivu@student.msu.edu) - Command line parameters
 John Van Essen (vanes002@maroon.tc.umn.edu) - DOOM Mini FAQ/Miscellaneous
 Jim Urbas (jimu@point.cs.uwm.edu) - DOOM DeathMatch WAD Ranking
-Frans P. de Vries (fpdevries@hgl.signaal.nl) - The cool ASCII DOOM logo,
+Frans P. de Vries (f32devries@hgl.signaal.nl) - The cool ASCII DOOM logo,
                                                lots of grammatic help, and
                                                never ending FAQ attention
 "Zhar" (cerberus@hade.eqinox.gen.nz) - Fixing the "*" search method
@@ -1721,7 +1721,7 @@ the NETWORKED computer, not your own...)  There are a number of
 common viruses spread by booting computers from infected disks.
 (Stoned, Form, and Michelangelo to name a few.)  Let's not give
 DOOM a bad name by booting network computers from infected disks!
-(btw, F-prot from oak.oakland.edu as /pub/msdos/virus/fp-211.zip is
+(btw, F-prot from oak.oakland.edu as /pub/msdos/virus/f32-211.zip is
 an EXCELLENT antivirus program. <plug>)
 
         You must make sure that all of the networked computers using DOOM are
@@ -1838,7 +1838,7 @@ us, follow these steps to get the IHHD up and running:
                 "showlog"
         (7) If you've got these, you're cool.  Otherwise, try the above
             steps again, re-retrieve the "dialer1.6.4.shar" file from
-            "rex.fpc.mit.edu" using the instructions above, or call for help.
+            "rex.f32c.mit.edu" using the instructions above, or call for help.
 
 If everything checks out, you're ready to rumble!
 

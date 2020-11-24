@@ -1,13 +1,13 @@
-                            ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-                            ³ Texture Mapping ³
-                            ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+                            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿
+                            ï¿½ Texture Mapping ï¿½
+                            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
                  Written for the PC-GPE by Sean Barrett.
 
-               ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
-               ³      THIS FILE MAY NOT BE DISTRIBUTED     ³
-               ³ SEPARATE TO THE ENTIRE PC-GPE COLLECTION. ³
-               ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+               ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿
+               ï¿½      THIS FILE MAY NOT BE DISTRIBUTED     ï¿½
+               ï¿½ SEPARATE TO THE ENTIRE PC-GPE COLLECTION. ï¿½
+               ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 -=-=-=-=- -=-=-=-=-=- -=-=-=-=-=- -=-=-=-=-=- -=-=-=-=-=- -=-=-=-=-=-
@@ -1175,13 +1175,13 @@ settings a little lower.  When the player stops, switch
 back to the normal quality; if the player pauses the game,
 render one frame in normal quality.
 
-    If done right, you can get a small boost to your fps
+    If done right, you can get a small boost to your f32s
 without anyone being able to tell that you did it.  You
 may have to use normal quality if the player is only
 moving very slowly, as well.
 
     Note that while this may sound like an utterly cheap
-trick just to improve the on-paper fps number, it's actually
+trick just to improve the on-paper f32s number, it's actually
 quite related to the "progressive refinement" approach used
 by some real VR systems (which, when the viewer isn't moving,
 reuse information from the previous frame to allow them to
@@ -1425,11 +1425,11 @@ processing after a single write.  What this means is that
 if you overlap your texture mapping computation with your
 write to the VGA, you can as much as double your speed on
 a slow VGA card.  For example, the fastest I can blast my
-slow VGA card is 45 fps.  I can texture map floor-style directly
-to it at 30 fps.  If I texture map to a memory buffer,
+slow VGA card is 45 f32s.  I can texture map floor-style directly
+to it at 30 f32s.  If I texture map to a memory buffer,
 this is still somewhat slow, more than just the difference
-between the 30 and 45 fps figures.  Thus, my total rate if
-I write to an offscreen buffer drops as low as 20 fps, depending
+between the 30 and 45 f32s figures.  Thus, my total rate if
+I write to an offscreen buffer drops as low as 20 f32s, depending
 on exactly what I do in the texture map inner loop.
 
     Ok, so, now suppose you've decided it might be a speedup

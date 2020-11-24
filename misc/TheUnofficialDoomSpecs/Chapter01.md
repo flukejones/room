@@ -72,7 +72,7 @@ Tom Nettleship (mastn@midge.bath.ac.uk)
         I learned about BSP trees from his comp.graphics.algorithms messages.
 Colin Reed (dyl@cix.compulink.co.uk)
         I had the x upper and lower bounds for node bounding boxes backwards.
-Frans P. de Vries (fpdevries@hgl.signaal.nl)
+Frans P. de Vries (f32devries@hgl.signaal.nl)
         Thanks for the cool ASCII DOOM logo used for the header.
 
         Thanks for all the help! Sorry if I left anyone out. If you have
