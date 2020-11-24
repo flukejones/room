@@ -9,7 +9,7 @@ typedef struct thinker_s {
 } thinker_t;
 ```
 
-Much of the reason for the linked list appears to be so that it is easy to add/remove items created using `Z_Malloc`, the Doom memory manager.
+Much of the reason for the linked list appears to be so that it is easy to add/remove items created using `Z_Malloc`, the Doom memory manager. It is also important to note that the linked-list *demands* that memory locations be stable (nevermind the pointers jammed through the `mobj_t`).
 
 ![](./images/thinker_links.png)
 
@@ -62,6 +62,36 @@ These have pointers to the sectors they affect, and the thinker function is rela
 
 It would be simple enough to either combine these in one, or have separate containers per type - though thinkers would have to be run for each.
 
+## Object creation
+
+Many of the map objects are created via a multistep process.
+
+1. Get the `Thing` from the wad file
+2. Call a specific function related to type:
+  -. `P_SpawnMapThing()`
+    + `P_SpawnMobj()` or,
+    +. `P_SpawnPlayer()` then calls,
+      - `P_SpawnMobj()`
+  - `P_SpawnPuff(x,y,z,type)`
+3. Or call a number of special-case functions like `A_BFGSpray()`
+
+All of these functions will call on `P_SpawnMobj()` in their body somewhere, which in *that* function creates the object data with:
+
+```C
+mobj = Z_Malloc(sizeof(*mobj), PU_LEVEL, NULL);
+```
+
+this means the object is now in the heap as shown in the first diagram, with a purge level of `PU_LEVEL` which means the object is to hang around for the duration of the level or until the object changes this itself.
+
+The last step of `P_SpawnMobj()` is to run:
+
+```C
+    mobj->thinker.function = P_MobjThinker;
+    P_AddThinker(&mobj->thinker);
+    return (mobj);
+```
+
+`P_MobjThinker` is a function that is run in the `RunThinkers` tic. `P_AddThinker` inserts the thinker in the linked list.
 
 ### mobj_t
 
