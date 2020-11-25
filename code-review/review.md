@@ -1,5 +1,7 @@
 Below are my notes as written while rewriting the Doom source in Rust.
 
+I'd originally done this using Chocolate Doom source, which has a lot of added complexity in it due to supporting many Doom engined games - I'm now rewriting it using the OG Doom source.
+
 ## Why?
 
 Because I can, and it's a very good way to learn the Doom engine and how it did things.
@@ -21,21 +23,23 @@ The Doom (C src) call tree in detail:
 There is a heck of a lot of game setup stuff being done here with CLI args.
 
 - `D_DoomLoop`
-  + `D_RunFrame`
     - `I_StartFrame` // does nothing?
     - [`TryRunTics`](#TryRunTics)
-      + `loop_interface->RunTic()`
-        - `G_Ticker`
-          + `P_Ticker`, if game state is `GS_LEVEL`
-            - `P_RunThinkers`
-            - `P_UpdateSpecials`
-            - `P_RespawnSpecials`
-          + `WI_Ticker` if game state is `GS_INTERMISSION`
-          + `F_Ticker` if game state is `GS_FINALE`
-          + `D_PageTicker` if game state is `GS_DEMOSCREEN`
+      - `G_Ticker`
+        + `P_Ticker`, if game state is `GS_LEVEL`
+          - `P_RunThinkers`
+          - `P_UpdateSpecials`
+          - `P_RespawnSpecials`
+        + `WI_Ticker` if game state is `GS_INTERMISSION`
+        + `F_Ticker` if game state is `GS_FINALE`
+        + `D_PageTicker` if game state is `GS_DEMOSCREEN`
+      - `M_Ticker`
+      - `NetUpdate`
+        + `D_ProcessEvents`
+        + `G_BuildTiccmd`
     - `S_UpdateSounds
     - [`D_Display`](#D_Display)
-    - [`I_FinishUpdate`](#I_FinishUpdate) called after [`D_Display`](#D_Display) if no screen wipe
+      + [`I_FinishUpdate`](#I_FinishUpdate) called after [`D_Display`](#D_Display) if no screen wipe
 
 # D_DoomLoop
 - `D_DoomLoop`, main loop, never exits. Timing, I/O, ticker, drawers. I_GetTime, I_StartFrame, and I_StartTic. Calls below functions as a pre-start then calls `D_RunFrame` in a loop that never exits.
@@ -59,18 +63,17 @@ Does two things, a screen 'wipe' if required which is the randomised columns of 
 
 - `I_StartFrame`, which does nothing in src. For frame sync ops?
 - [`TryRunTics`](#TryRunTics), advance tics
-  + `loop_interface->RunTic()`
-    - `G_Ticker`
-      + `P_Ticker`, if game state is `GS_LEVEL`
-        - `P_RunThinkers`, main AI/movers/lights updates
-        - `P_UpdateSpecials`
-        - `P_RespawnSpecials`
-      + `WI_Ticker` if game state is `GS_INTERMISSION`
-      + `F_Ticker` if game state is `GS_FINALE`
-      + `D_PageTicker` if game state is `GS_DEMOSCREEN`
+  - `G_Ticker`
+    + `P_Ticker`, if game state is `GS_LEVEL`
+      - `P_RunThinkers`, main AI/movers/lights updates
+      - `P_UpdateSpecials`
+      - `P_RespawnSpecials`
+    + `WI_Ticker` if game state is `GS_INTERMISSION`
+    + `F_Ticker` if game state is `GS_FINALE`
+    + `D_PageTicker` if game state is `GS_DEMOSCREEN`
 - `S_UpdateSounds` update sounds for the current player of this game view (there are 4 possilbe players, each with a differnet view)
 - [`D_Display`](#D_Display), this may return a bool, true if a screen wipe is required
-- [`I_FinishUpdate`](#I_FinishUpdate) called after [`D_Display`](#D_Display) if no screen wipe
+  - [`I_FinishUpdate`](#I_FinishUpdate) called after [`D_Display`](#D_Display) if no screen wipe
 
 ### D_Display
 
@@ -85,48 +88,7 @@ Game tics/time, and network syncing.
 
 If tics are too far behind rendering then the tics will run in a loop until caught up. If there are no players in the game then the loop is skipped.
 
-In the while loop for each tic to run the callback in `loop_interface->RunTic()` is run. This structure is set up by `D_RegisterLoopCallbacks`, which is called in chain:
-
-- `main`
-  + `D_DoomMain`
-    - `D_CheckNetGame`
-      + [`D_RegisterLoopCallbacks`](#D_RegisterLoopCallbacks)
-
 It also checks per loop if a player has joined. So it looks like co-op play was possible with running a regular game.
-
-### D_RegisterLoopCallbacks
-
-Sets `loop_interface` to the arg passed in. The structure is [`loop_interface_t`](#loop_interface_t)
-
-#### loop_interface_t
-
-```C
-typedef struct {
-    // Read events from the event queue, and process them.
-    void (*ProcessEvents)();
-
-    // Given the current input state, fill in the fields of the specified
-    // ticcmd_t structure with data for a new tic.
-    void (*BuildTiccmd)(ticcmd_t *cmd, int maketic);
-
-    // Advance the game forward one tic, using the specified player input.
-    void (*RunTic)(ticcmd_t *cmds, boolean *ingame);
-
-    // Run the menu (runs independently of the game).
-    void (*RunMenu)();
-} loop_interface_t;
-```
-
-this is set up with:
-
-```C
-static loop_interface_t doom_loop_interface = {
-    D_ProcessEvents,
-    G_BuildTiccmd,
-    RunTic,
-    M_Ticker
-};
-```
 
 `D_ProcessEvents` takes all incoming events, `G_BuildTiccmd` builds a tic command. The tic command is a structure that can be recorded for playback later and is how demos are acheived. 
 
