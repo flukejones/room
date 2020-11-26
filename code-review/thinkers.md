@@ -235,8 +235,26 @@ mobj->thinker.function.acp1 = (actionf_p1)P_MobjThinker;
 
 *each of these objects owns the function*.
 
-# Side nots for self
+# Movement
 
-Thinker action can be a trait. The trait can then operate on self as is, and can be stored in a single array as `Vec<Option<dyn Thinker>>`
-
-States are the hard part as there are two function types in a state. There are 900+ states in a global array, and access through states is through an enum indexer.
++ p_xy_movement
+  - `P_TryMove`
+    + P_CheckPosition
+      - R_PointInSubsector
+      - P_BlockThingsIterator
+      - PIT_CheckThing
+      - P_BlockLinesIterator
+    + P_UnsetThingPosition
+    + P_SetThingPosition
+      - R_PointInSubsector
+    + P_PointOnLineSide (in another module)
+    + P_CrossSpecialLine (in another module)
+  - P_SlideMove
+    + P_PathTraverse
+      - P_BlockLinesIterator (in another module)
+      - PIT_AddLineIntercepts (in another module)
+      - PIT_AddThingIntercepts (in another module)
+      - P_TraverseIntercepts (in another module)
+    + PTR_SlideTraverse
+    + `P_TryMove`
+    + P_HitSlideLine
