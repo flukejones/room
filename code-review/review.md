@@ -1,6 +1,6 @@
 Below are my notes as written while rewriting the Doom source in Rust.
 
-I'd originally done this using Chocolate Doom source, which has a lot of added complexity in it due to supporting many Doom engined games - I'm now rewriting it using the OG Doom source.
+I'd originally done this using Chocolate Doom source, which has a lot of added complexity in it due to supporting many Doom engined games - I'm now rewriting it using the OG Doom source. These notes need to be adjusted as the Choc Doom source makes *a lot* of fundamental architecture changes to be able to compile several games from the same base of code.
 
 ## Why?
 
