@@ -1,3 +1,5 @@
+TODO: detail the portal/window handling
+
 # Movement and collision handling
 
 All `mobj_t` map objects, which are moveable entities spawned from map `Things`
@@ -28,7 +30,7 @@ First there is a wide-phase check against `Thing` axis-aligned bounding-box,
 to check the AABB against the line.
 
 Each line stores two (additional) items on level load: its AABB, and a line
-slope (2D X,Y remember). The slope is used to help very quickly check for AABB
+slope (2D XY). The slope is used to help very quickly check for AABB
 to line intersections as what it stores is whether the line is axis-aligned, or
 the slope is positive or negative.
 
@@ -36,6 +38,10 @@ Also checked are:
 - if the linedef blocks all, or only monsters
 - front and back sector heights to see if a step is allowed
 - special lines (such as triggers)
+
+If a line or tall step are encountered where the player is blocked, then the
+function `P_SlideMove` is called to check if the player can *slide* along the
+wall.
 
 ## Movement
 
@@ -52,6 +58,11 @@ above this particular function are `This is a kludgy mess`... Which is going to
 be the main driver of my updating this code to use a more modern approach.
 Seriously, it's not nice to look at. And the modernisation will come with the
 ability to do slides anyway.
+
+The essence of `P_SlideMove` is to move the player along the wall, the direction
+is gotten from the players angle to the wall normal (dot + cosine), with the
+cosine also used to modulate the players momentum. That is, cosine is 0.0 for player
+facing straight in to the wall, 1.0 for facing along the wall.
 
 ## Updating
 
